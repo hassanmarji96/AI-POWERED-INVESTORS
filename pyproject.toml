@@ -1,0 +1,19 @@
+[project]
+name = "ai-powered-investors"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Hassan Marji", email = "h.marji@reply.it" }
+]
+requires-python = ">=3.11"
+dependencies = [
+    "pymupdf>=2.0",
+]
+
+[project.scripts]
+ai-powered-investors = "ai_powered_investors:main"
+
+[build-system]
+requires = ["uv_build>=0.13.4,<0.14.0"]
+build-backend = "uv_build"
