@@ -68,15 +68,15 @@ def ingest_document(
         source_file=pdf_file.name
     )
     
-    # metrics = extract_financial_metrics(
-    #     retriever=Retriever(vector_store.client),
-    #     company=company,
-    #     year=int(year) if year.isdigit() else None
-    # )
+    metrics = extract_financial_metrics(
+        retriever=Retriever(vector_store.client),
+        company=company,
+        year=int(year) if year.isdigit() else None
+    )
 
-    # # Persist metrics to PostgreSQL
-    # if metrics:
-    #     save_metrics(company=company, year=int(year) if str(year).isdigit() else None, metrics=metrics)
+    # Persist metrics to PostgreSQL
+    if metrics:
+        save_metrics(company=company, year=int(year) if str(year).isdigit() else None, metrics=metrics)
     
 def ingest_directory(input_dir: str) -> None:
     """_summary_ Esegue l'ingesting di tutta la directory

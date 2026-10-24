@@ -2,24 +2,35 @@ import os
 from types import SimpleNamespace
 
 from dotenv import load_dotenv
-from pydantic import BaseModel, field_validator, Field
+from pydantic import AliasChoices, BaseModel, ConfigDict, field_validator, Field
 
 from ai_powered_investors.llm.azure_openai import get_structured_completion
 from ai_powered_investors.vectorstore.azure_ai_search import AzureAISearchVectorStore
-# from ai_powered_investors.database.save_metrics import save_metrics
+from ai_powered_investors.database.save_metrics import save_metrics
 
 load_dotenv()
 
 
 class FinancialMetrics(BaseModel):
-    revenue: str | int | None = Field(None, alias="Revenue")
-    net_income: str | int | None = Field(None, alias="Net Income")
-    operating_income: str | int | None = Field(None, alias="Operating Income")
-    cash_flow: str | int | None = Field(None, alias="Cash Flow from Operating Activities")
-    total_assets: str | int | None = Field(None, alias="Total Assets")
-    total_liabilities: str | int | None = Field(None, alias="Total Liabilities")
-    risk_factors: str | list | None = Field(None, alias="Top Risk Factors")
-    growth_drivers: str | list | None = Field(None, alias="Top Growth Drivers")
+    model_config = ConfigDict(populate_by_name=True)
+
+    revenue: str | int | None = Field(
+        None, validation_alias=AliasChoices("Revenue", "revenue"))
+    net_income: str | int | None = Field(
+        None, validation_alias=AliasChoices("Net Income", "net_income"))
+    operating_income: str | int | None = Field(
+        None, validation_alias=AliasChoices("Operating Income", "operating_income"))
+    cash_flow: str | int | None = Field(
+        None, validation_alias=AliasChoices(
+            "Cash Flow from Operating Activities", "cash_flow_from_operating_activities", "cash_flow"))
+    total_assets: str | int | None = Field(
+        None, validation_alias=AliasChoices("Total Assets", "total_assets"))
+    total_liabilities: str | int | None = Field(
+        None, validation_alias=AliasChoices("Total Liabilities", "total_liabilities"))
+    risk_factors: str | list | None = Field(
+        None, validation_alias=AliasChoices("Top Risk Factors", "top_risk_factors", "risk_factors"))
+    growth_drivers: str | list | None = Field(
+        None, validation_alias=AliasChoices("Top Growth Drivers", "top_growth_drivers", "growth_drivers"))
 
 
 class Retriever:
@@ -199,11 +210,11 @@ def main() -> None:
 
 
 
-    # save_metrics(
-    #     company=company,
-    #     year=year,
-    #     metrics=results
-    # )
+    save_metrics(
+        company=company,
+        year=year,
+        metrics=results
+    )
 
 if __name__ == "__main__":
     main()
